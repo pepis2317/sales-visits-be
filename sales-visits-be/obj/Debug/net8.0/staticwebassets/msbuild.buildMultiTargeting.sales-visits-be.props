@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/sales-visits-be.props" />
-</Project>
