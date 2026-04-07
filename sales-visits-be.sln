@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sales-visits-be", "sales-visits-be\sales-visits-be.csproj", "{B049D75B-ED0E-48F7-B449-EB7370B4AAAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "entities", "entities\entities.csproj", "{D53EFA7B-B3A0-49FA-8515-1F98E930C045}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B049D75B-ED0E-48F7-B449-EB7370B4AAAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B049D75B-ED0E-48F7-B449-EB7370B4AAAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B049D75B-ED0E-48F7-B449-EB7370B4AAAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B049D75B-ED0E-48F7-B449-EB7370B4AAAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D53EFA7B-B3A0-49FA-8515-1F98E930C045}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D53EFA7B-B3A0-49FA-8515-1F98E930C045}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D53EFA7B-B3A0-49FA-8515-1F98E930C045}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D53EFA7B-B3A0-49FA-8515-1F98E930C045}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
