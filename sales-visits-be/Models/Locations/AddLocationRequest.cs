@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using MediatR;
+using NetTopologySuite.Geometries;
 
 namespace sales_visits_be.Models.Locations;
 
@@ -19,4 +20,20 @@ public class GeocodingResult
 {
     [JsonPropertyName("formatted_address")]
     public string FormattedAddress { get; set; }
+    [JsonPropertyName("geometry")]
+    public Geometry Geometry { get; set; }
+}
+public class Geometry
+{
+    [JsonPropertyName("location")]
+    public Location Location { get; set; }
+}
+
+public class Location
+{
+    [JsonPropertyName("lat")]
+    public double Lat { get; set; }
+
+    [JsonPropertyName("lng")]
+    public double Lng { get; set; }
 }

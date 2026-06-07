@@ -38,23 +38,6 @@ public class GetLocationsHandler : IRequestHandler<GetLocationsRequest, GetLocat
 
             return new GetLocationsResponse { Locations = list };
         }
-        if (!string.IsNullOrEmpty(request.Query))
-        {
-            var normalizedQuery = request.Query.ToLower();
-
-            var list = await query
-                .Where(q => EF.Functions.ILike(q.Name, $"%{normalizedQuery}%"))
-                .OrderByDescending(q => EF.Functions.TrigramsSimilarity(q.Name.ToLower(), normalizedQuery))
-                .Take(10)
-                .Select(q => new LocationDropdown
-                {
-                    Label = q.Name,
-                    Value = q.Id.ToString(),
-                    ApproximateDistance = Math.Round(q.Location.Distance(userPoint) * 111.139, 2)
-                }).ToListAsync(cancellationToken);
-
-            return new GetLocationsResponse { Locations = list };
-        }
 
         var nearestList = await query.OrderBy(q => q.Location.Distance(userPoint))
             .Take(10)

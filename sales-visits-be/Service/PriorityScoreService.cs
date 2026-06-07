@@ -38,6 +38,7 @@ public class PriorityScoreService
                 LastVisitedAt = q.Max(v => v.CreatedAt)
             })
             .ToListAsync(cancellationToken);
+        
         if (!visitGroups.Any())
         {
             return new List<CustomerPriorityScore>();
@@ -57,8 +58,8 @@ public class PriorityScoreService
                 double avgDaysBetweenVisits = ComputeAvgGap(q.VisitDates);
                 double daysSinceLast = (now - q.LastVisitedAt).TotalDays;
 
-                double recencyScore =
-                    avgDaysBetweenVisits > 0 ? Math.Min(daysSinceLast / avgDaysBetweenVisits, 1.0) : 1.0;
+                double recencyScore = avgDaysBetweenVisits > 0 ? 
+                    Math.Min(daysSinceLast / avgDaysBetweenVisits, 1.0) : 1.0;
                 double frequencyScore = maxVisitCount > 0 ? (double)q.VisitCount / maxVisitCount : 0;
                 double consistencyScore = ComputeConsistencyScore(q.VisitDates);
 

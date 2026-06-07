@@ -12,4 +12,6 @@ public partial class Sale
     public virtual ICollection<RepositionRequest> RepositionRequests { get; set; } = new List<RepositionRequest>();
 
     public virtual ICollection<SalesVisit> SalesVisits { get; set; } = new List<SalesVisit>();
+
+    public virtual ICollection<VisitPlan> VisitPlans { get; set; } = new List<VisitPlan>();
 }

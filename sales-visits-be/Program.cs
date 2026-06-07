@@ -31,6 +31,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 builder.Services.AddScoped<PriorityScoreService>();
 builder.Services.AddSingleton<DistanceMatrixService>();
 builder.Services.AddSingleton<RouteSolverService>();
+builder.Services.AddTransient<BlobService>();
 builder.Services.AddScoped<TerritoryService>();
 
 var app = builder.Build();

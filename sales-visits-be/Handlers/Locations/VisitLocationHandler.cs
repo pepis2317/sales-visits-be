@@ -56,7 +56,7 @@ public class VisitLocationHandler:IRequestHandler<VisitLocationRequest, Location
             CustomerLocationId = location.Id,
             SalesId = request.SalesId,
             CreatedAt =  DateTime.UtcNow,
-            VisitTypeId =  request.TypeId,
+            Note = request.Note
         };
         
         _db.SalesVisits.Add(visit);

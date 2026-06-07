@@ -17,6 +17,8 @@ public partial class SalesVisit
 
     public Guid VisitTypeId { get; set; }
 
+    public string? Note { get; set; }
+
     public virtual CustomerLocation CustomerLocation { get; set; } = null!;
 
     public virtual Sale Sales { get; set; } = null!;

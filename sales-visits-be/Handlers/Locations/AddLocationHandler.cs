@@ -1,6 +1,7 @@
 using entities;
 using entities.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using sales_visits_be.Models.Locations;
 
@@ -19,6 +20,17 @@ public class AddLocationHandler:IRequestHandler<AddLocationRequest, LocationResp
     }
     public async Task<LocationResponse> Handle(AddLocationRequest request, CancellationToken cancellationToken)
     {
+        var check = await _db.CustomerLocations
+            .FirstOrDefaultAsync(q => q.Name.Trim().ToUpper() == request.Name.Trim().ToUpper(), cancellationToken);
+        if (check != null)
+        {
+            return new LocationResponse
+            {
+                IsSuccess = false,
+                Message = $"{request.Name} already exists"
+            };
+        }
+        
         var locationId = Guid.NewGuid();
         var incomingPoint = new Point(request.Longitude, request.Latitude) { SRID = 4326 };
         var apiKey = _configuration["GoogleMaps:ApiKey"];
@@ -33,8 +45,7 @@ public class AddLocationHandler:IRequestHandler<AddLocationRequest, LocationResp
             Id =  locationId,
             Name = request.Name.ToUpper(),
             Location = incomingPoint,
-            Address = address.ToUpper(),
-            LastVisitedAt = DateTime.UtcNow
+            Address = address.ToUpper()
         };
         _db.CustomerLocations.Add(location);
         await _db.SaveChangesAsync(cancellationToken);

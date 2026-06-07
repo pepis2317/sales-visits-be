@@ -6,7 +6,7 @@ public class VisitLocationRequest:IRequest<LocationResponse>
 {
     public Guid SalesId { get; set; }
     public Guid LocationId { get; set; }
-    public Guid TypeId { get; set; }
+    public string Note { get; set; } = string.Empty;
     public bool Recenter { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
