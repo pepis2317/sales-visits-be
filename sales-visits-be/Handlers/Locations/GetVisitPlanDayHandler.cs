@@ -24,6 +24,7 @@ public class GetVisitPlanDayHandler : IRequestHandler<GetVisitPlanDayRequest, Ge
             .OrderBy(q => q.Date).ThenBy(q => q.VisitOrder)
             .Select(q => new VisitPlanData
             {
+                Id = q.Id,
                 LocationId = q.CustomerLocationId,
                 VisitOrder = q.VisitOrder,
                 LocationName = q.CustomerLocation.Name,

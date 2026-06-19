@@ -8,6 +8,7 @@ public class GetVisitPlanDayResponse
 }
 public class VisitPlanData
 {
+    public Guid Id { get; set; }
     public Guid LocationId { get; set; }
     public string LocationName { get; set; }
     public DateTime Date { get; set; }
