@@ -30,34 +30,30 @@ public class AccuracyReportHandler : IRequestHandler<AccuracyReportRequest, Accu
         var plans = await _db.VisitPlans
             .Include(q => q.CustomerLocation)
             .Where(q => q.SalesId == request.SalesId &&
-                        q.Date >= startOfMonth.AddDays(-14) &&
+                        q.Date >= startOfMonth &&
                         q.Date < startOfNextMonth)
             .OrderBy(q => q.VisitOrder)
             .ToListAsync(cancellationToken);
         var visitGroups = visits.GroupBy(q => TimeZoneInfo.ConvertTimeFromUtc(q.CreatedAt, timeZone).Date).ToList();
-        var planGroups = plans.GroupBy(q => TimeZoneInfo.ConvertTimeFromUtc(q.Date.ToUniversalTime(), timeZone).Date).ToList();
+        var planGroups = plans.GroupBy(q => TimeZoneInfo.ConvertTimeFromUtc(q.Date.ToUniversalTime(), timeZone).Date)
+            .ToList();
         var list = new List<AccuracyReport>();
         foreach (var visitedGroup in visitGroups)
         {
             var date = visitedGroup.Key.Date;
             var planGroup = planGroups.FirstOrDefault(q => q.Key == date);
-            var dueGroup = planGroups.FirstOrDefault(q => q.Key == date.AddDays(-14));
-            var visited = visitedGroup.Select(q => q.CustomerLocation.Name).OrderBy(q => q).ToList();
+            var visited = visitedGroup.OrderBy(q => q.CreatedAt).Select(q => new VisitedLocationData
+            {
+                Name = q.CustomerLocation.Name,
+                Note = q.Note,
+                Time = TimeOnly.FromDateTime(q.CreatedAt)
+            }).ToList();
             var planList = new List<string>();
             if (planGroup != null)
             {
-                var visitPlans = planGroup.Select(q => q.CustomerLocation.Name).ToList();
+                var visitPlans = planGroup.OrderBy(q => q.Date).Select(q => q.CustomerLocation.Name).ToList();
                 planList.AddRange(visitPlans);
             }
-
-            if (dueGroup != null)
-            {
-                var duePlans = dueGroup.Select(q => q.CustomerLocation.Name).ToList();
-                var excluded = duePlans.Where(q => !planList.Contains(q)).ToList();
-                planList.AddRange(excluded);
-            }
-
-            planList = planList.OrderBy(q => q).ToList();
 
             var matching = visitedGroup.Count(q => planList.Contains(q.CustomerLocation.Name));
             list.Add(new AccuracyReport
@@ -68,6 +64,24 @@ public class AccuracyReportHandler : IRequestHandler<AccuracyReportRequest, Accu
                 VisitedLocations = visited
             });
         }
+        var visitGroupDates = visitGroups.Select(q => q.Key.Date).ToList();
+        var onlyPlanned = planGroups.Where(q => !visitGroupDates.Contains(q.Key.Date)).ToList();
+        foreach(var planGroup in onlyPlanned)
+        {
+            var date = planGroup.Key.Date;
+            var planList = new List<string>();
+            var visitPlans = planGroup.OrderBy(q => q.Date).Select(q => q.CustomerLocation.Name).ToList();
+            planList.AddRange(visitPlans);
+            list.Add(new AccuracyReport
+            {
+                Accuracy = null,
+                Date = date,
+                PlannedLocations = planList,
+            });
+            
+        }
+        
+        list = list.OrderBy(q => q.Date).ToList();
 
         var firstDayOfMonth = TimeZoneInfo.ConvertTimeFromUtc(startOfMonth, timeZone);
         var weeklyReports = list.GroupBy(q =>

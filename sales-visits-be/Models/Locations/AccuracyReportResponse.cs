@@ -12,7 +12,13 @@ public class WeeklyReport
 public class AccuracyReport
 {
     public DateTime Date { get; set; }
-    public List<string> VisitedLocations { get; set; } = new();
+    public List<VisitedLocationData>? VisitedLocations { get; set; } = new();
     public List<string>? PlannedLocations { get; set; } = new();
     public double? Accuracy { get; set; }
+}
+public class VisitedLocationData
+{
+    public string Name { get; set; } = string.Empty;
+    public TimeOnly Time { get; set; }
+    public string? Note { get; set; }
 }
