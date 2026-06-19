@@ -16,13 +16,8 @@ public class DeleteVisitPlanHandler : IRequestHandler<DeleteVisitPlanRequest, Lo
 
     public async Task<LocationResponse> Handle(DeleteVisitPlanRequest request, CancellationToken cancellationToken)
     {
-        var startOfDay = request.Date.ToUniversalTime();
-        var endOfDay = request.Date.AddDays(1).ToUniversalTime();
         var plan = await _db.VisitPlans
-            .FirstOrDefaultAsync(q => q.Date >= startOfDay  && 
-                                      q.Date <= endOfDay && 
-                                      q.SalesId == request.SalesId &&
-                                      q.VisitOrder == request.VisitOrder, cancellationToken);
+            .FirstOrDefaultAsync(q => q.Id == request.Id, cancellationToken); 
         if(plan == null)
         {
             return new LocationResponse
