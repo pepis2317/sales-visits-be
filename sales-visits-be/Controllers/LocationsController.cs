@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using sales_visits_be.Handlers.Locations;
 using sales_visits_be.Models;
 using sales_visits_be.Models.Locations;
 
@@ -129,6 +130,13 @@ public class LocationsController:ControllerBase
     
     [HttpGet("get-not-visited-twice")]
     public async Task<ActionResult<VisitedTwiceResponse>> GetNotVisitedTwice([FromQuery] NotVisitedTwiceRequest request)
+    {
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+    
+    [HttpGet("get-not-visited-in-two-weeks")]
+    public async Task<ActionResult<GetNotVisitedInTwoWeeksResponse>> GetNotVisitedTwoWeeks([FromQuery] GetNotVisitedInTwoWeeksRequest request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
